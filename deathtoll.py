@@ -36,11 +36,11 @@ st.title(f'Coronavirus Disease (COVID-19) Evolution :hospital:')
 st.text('The data is collected from Johns Hopkins University\'s repository')
 
 
-st.markdown('Fork of https://github.com/sergiocalde94/COVID-19-Evolution, but with focus on death trends only. '
-'Considering that confirmed "cases" depend a lot on the number of tests performed per country. '
-'And tests depends also on availability of resources and defined protocols. '
-' More data on this topic: https://ourworldindata.org/coronavirus-testing-source-data '
-)
+st.markdown('Fork of https://github.com/sergiocalde94/COVID-19-Evolution, great job from my colleague @sergiocalde94. '
+''
+'Now adapted to focus on death trends. Considering that confirmed "cases" depend a lot on the number of tests performed per country, their availability and the defined protocols. '
+'More data on testing statistics per country: [ourworldindata](https://ourworldindata.org/coronavirus-testing-source-data), '
+'[worldometer](https://www.worldometers.info/coronavirus/covid-19-testing/)')
 
 plot_figure = plot_provinces_map_animated(df_all_cases_provinces)
 
@@ -64,7 +64,7 @@ min_number_cases = st.slider('Minimum number of deaths?',
 df_all_cases_countries_from_case_n = (
     format_data_from_case_n(df_all_cases_countries,
                             groupby='country_or_region',
-                            n=min_number_cases)
+                            n=min_number_cases, mytype='Deaths')
 )
 
 
