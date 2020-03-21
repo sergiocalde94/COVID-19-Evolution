@@ -124,13 +124,14 @@ def format_data_from_case_n(df: pd.DataFrame,
 
     return df_merged_filtered
 
-## Adaptation to focus only on the given type, for instance 'Deaths' instead of 'Confirmed'
+
 @st.cache
 def format_data_from_case_n(df: pd.DataFrame,
                             groupby: str,
-                            n: int, mytype: str) -> pd.DataFrame:
+                            n: int,
+                            my_type: str = 'Confirmed') -> pd.DataFrame:
     first_date_grouped = (
-        df[(df['type'] == mytype) & (df['cases'] >= n)]
+        df[(df['type'] == my_type) & (df['cases'] >= n)]
         .groupby(groupby)
         .date
         .first()
@@ -150,7 +151,10 @@ def format_data_from_case_n(df: pd.DataFrame,
     df_merged_filtered[f'days_from_{n}'] = (df_merged_filtered[f'days_from_{n}']
                                             .fillna(1))
 
-    df_merged_filtered = df_merged_filtered.astype({'date': 'datetime64[ns]'}).sort_values(by=[groupby, 'type', 'date']).reset_index()
+    df_merged_filtered = (df_merged_filtered
+                          .astype({'date': 'datetime64[ns]'})
+                          .sort_values(by=[groupby, 'type', 'date'])
+                          .reset_index())
 
     df_merged_filtered[f'days_from_{n}'] = (
         df_merged_filtered

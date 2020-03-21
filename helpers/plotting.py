@@ -89,13 +89,15 @@ def plot_figure_countries_facet_new_cases_per_day(df_countries: pd.DataFrame,
         .for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
     )
 
-# Adaptation to focus on a given type of cases, compliant with cumulative or cases per day
+
 def plot_figure_countries_facet(df_countries: pd.DataFrame,
-                                           population_type: str,
-                                           min_number_cases: int,
-                                           log_scale: bool, cumulative: bool, mytype: str) -> Figure:
+                                min_number_cases: int,
+                                log_scale: bool,
+                                cumulative: bool,
+                                my_type: str) -> Figure:
     df_countries_copy = df_countries.copy()
-    if cumulative == False:
+
+    if not cumulative:
         df_countries_copy['cases'] = (
             df_countries_copy
             .groupby(['country_or_region', 'type'])
@@ -103,20 +105,26 @@ def plot_figure_countries_facet(df_countries: pd.DataFrame,
             .transform(
                 lambda group: group.rolling(2, min_periods=1).apply(
                     lambda x: x if len(x) == 1 else x.diff().iloc[1]
-                    )
-                    )
-                    )
-    df_countries_copy[mytype] = df_countries_copy['cases']
-    fig = (px.line(df_countries_copy[df_countries_copy['type']==mytype],
-             x=f'days_from_{min_number_cases}', y=mytype,
-             color='country_or_region',
-             log_y=log_scale).for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1])))
+                )
+            )
+        )
+
+    fig = (px
+           .line(df_countries_copy[df_countries_copy['type'] == my_type],
+                 x=f'days_from_{min_number_cases}', y='cases',
+                 color='country_or_region',
+                 log_y=log_scale)
+           .for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1])))
+
+    fig.update_layout(yaxis_title=my_type)
+
     return fig
 
 
 def plot_china_vs_europe_vs_us(df_provinces: pd.DataFrame,
                                min_number_cases: int,
-                               log_scale: bool) -> Figure:
+                               log_scale: bool,
+                               my_type: str = None) -> Figure:
     df_provinces_filtered = (
         df_provinces[(df_provinces['continent'] == 'Europe')
                      | (df_provinces['country_or_region']
@@ -149,8 +157,15 @@ def plot_china_vs_europe_vs_us(df_provinces: pd.DataFrame,
     )
 
     df_provinces_filtered_formatted = format_data_from_case_n(
-        df_provinces_grouped, groupby='country_or_region', n=min_number_cases
+        df_provinces_grouped, groupby='country_or_region',
+        n=min_number_cases, my_type=my_type
     )
+
+    if my_type:
+        df_provinces_filtered_formatted = (
+            df_provinces_filtered_formatted
+            .loc[df_provinces_filtered_formatted['type'] == my_type]
+        )
 
     fig = (px
            .line(df_provinces_filtered_formatted,
@@ -159,7 +174,5 @@ def plot_china_vs_europe_vs_us(df_provinces: pd.DataFrame,
                  facet_row='type',
                  log_y=log_scale)
            .for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1])))
-
-    fig.layout.yaxis2.update(matches=None)
 
     return fig
