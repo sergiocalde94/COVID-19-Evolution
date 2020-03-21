@@ -1,6 +1,6 @@
 # Coronavirus Disease (COVID-19) Evolution :hospital:
 
-Covid-19 interactive visualizations to understand the evolution of the illness. 
+Covid-19 interactive visualizations to understand the evolution of the illness.
 
 ![Virus](https://media.giphy.com/media/vO2ByH5dWCJEc/giphy.gif)
 
@@ -18,4 +18,5 @@ It's better if you have an isolated environment activated before doing pip insta
 
 Once you have installed all of the requirements, you run the app with the command `streamlit run app.py` and automatically **streamlit** will open your navigator (localhost, port 8501 by default) and the app is ready, you can play with it!
 
-Note: This is an experiment, if you encounter with any issue, please let me know about it 
+Note: This is an experiment, if you encounter with any issue, please let me know about it.
+Note (2): You can try also `streamlit run deathtoll.py`, focused on death trends, as confirmed "cases" depend a lot on the number of tests performed per country.
