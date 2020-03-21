@@ -150,6 +150,8 @@ def format_data_from_case_n(df: pd.DataFrame,
     df_merged_filtered[f'days_from_{n}'] = (df_merged_filtered[f'days_from_{n}']
                                             .fillna(1))
 
+    df_merged_filtered = df_merged_filtered.astype({'date': 'datetime64[ns]'}).sort_values(by=[groupby, 'type', 'date']).reset_index()
+
     df_merged_filtered[f'days_from_{n}'] = (
         df_merged_filtered
         .groupby([groupby, 'type'])
