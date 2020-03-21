@@ -124,6 +124,43 @@ def format_data_from_case_n(df: pd.DataFrame,
 
     return df_merged_filtered
 
+## Adaptation to focus only on the given type, for instance 'Deaths' instead of 'Confirmed'
+@st.cache
+def format_data_from_case_n(df: pd.DataFrame,
+                            groupby: str,
+                            n: int, mytype: str) -> pd.DataFrame:
+    first_date_grouped = (
+        df[(df['type'] == mytype) & (df['cases'] >= n)]
+        .groupby(groupby)
+        .date
+        .first()
+        .reset_index()
+        .rename(columns=dict(date=f'date_{n}'))
+        .assign(**{f'days_from_{n}': lambda _: 1})
+    )
+
+    df_merged = df.merge(first_date_grouped,
+                         on=groupby,
+                         how='left')
+
+    df_merged_filtered = (
+        df_merged[df_merged['date'] >= df_merged[f'date_{n}']].copy()
+    )
+
+    df_merged_filtered[f'days_from_{n}'] = (df_merged_filtered[f'days_from_{n}']
+                                            .fillna(1))
+
+    df_merged_filtered = df_merged_filtered.astype({'date': 'datetime64[ns]'}).sort_values(by=[groupby, 'type', 'date']).reset_index()
+
+    df_merged_filtered[f'days_from_{n}'] = (
+        df_merged_filtered
+        .groupby([groupby, 'type'])
+        [f'days_from_{n}']
+        .transform('cumsum')
+    )
+
+    return df_merged_filtered
+
 
 def max_summary_by_country(df: pd.DataFrame, columns: [str]) -> pd.DataFrame:
     return (df

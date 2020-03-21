@@ -89,6 +89,30 @@ def plot_figure_countries_facet_new_cases_per_day(df_countries: pd.DataFrame,
         .for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
     )
 
+# Adaptation to focus on a given type of cases, compliant with cumulative or cases per day
+def plot_figure_countries_facet(df_countries: pd.DataFrame,
+                                           population_type: str,
+                                           min_number_cases: int,
+                                           log_scale: bool, cumulative: bool, mytype: str) -> Figure:
+    df_countries_copy = df_countries.copy()
+    if cumulative == False:
+        df_countries_copy['cases'] = (
+            df_countries_copy
+            .groupby(['country_or_region', 'type'])
+            .cases
+            .transform(
+                lambda group: group.rolling(2, min_periods=1).apply(
+                    lambda x: x if len(x) == 1 else x.diff().iloc[1]
+                    )
+                    )
+                    )
+    df_countries_copy[mytype] = df_countries_copy['cases']
+    fig = (px.line(df_countries_copy[df_countries_copy['type']==mytype],
+             x=f'days_from_{min_number_cases}', y=mytype,
+             color='country_or_region',
+             log_y=log_scale).for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1])))
+    return fig
+
 
 def plot_china_vs_europe_vs_us(df_provinces: pd.DataFrame,
                                min_number_cases: int,
