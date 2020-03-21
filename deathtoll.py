@@ -36,7 +36,7 @@ st.title(f'Coronavirus Disease (COVID-19) Evolution :hospital:')
 st.text('The data is collected from Johns Hopkins University\'s repository')
 
 
-st.markdown('Fork of https://github.com/sergiocalde94/COVID-19-Evolution, great job from my colleague @sergiocalde94. '
+st.markdown('Fork of https://github.com/sergiocalde94/COVID-19-Evolution, great job from my colleague [@sergiocalde94](https://twitter.com/sergiocalde94). '
 ''
 'Now adapted to focus on death trends. Considering that confirmed "cases" depend a lot on the number of tests performed per country, their availability and the defined protocols. '
 'More data on testing statistics per country: [ourworldindata](https://ourworldindata.org/coronavirus-testing-source-data), '
@@ -58,7 +58,7 @@ st.subheader('Country/Region Data To Compare :cityscape:')
 min_number_cases = st.slider('Minimum number of deaths?',
                              min_value=1,
                              max_value=400,
-                             value=100,
+                             value=10,
                              step=10)
 
 df_all_cases_countries_from_case_n = (
@@ -122,3 +122,8 @@ if countries_to_plot:
     )
 
     st.plotly_chart(figure)
+
+st.markdown('More info: ')
+st.markdown('* mortality rate estimation and age distribution: https://medium.com/@andreasbackhausab/coronavirus-why-its-so-deadly-in-italy-c4200a15a7bf, https://www.epicentro.iss.it/coronavirus/bollettino/Infografica_17marzo%20ITA.pdf')
+st.markdown('* epidemic simulator: https://gabgoh.github.io/COVID/index.html')
+st.markdown('* Dashboard of the COVID-19 Virus Outbreak in Singapore, with detail of all confirmed cases: https://co.vid19.sg/dashboard')
