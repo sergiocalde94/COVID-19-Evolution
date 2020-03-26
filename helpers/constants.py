@@ -1,7 +1,7 @@
 URL_DATA = ('https://raw.githubusercontent.com/'
             'CSSEGISandData/COVID-19/master/'
             'csse_covid_19_data/csse_covid_19_time_series/'
-            'time_series_19-covid-{}.csv')
+            'time_series_covid19_{}_global.csv')
 
 COUNTRIES_TRANSLATE_TO_COUNTRYINFO = {
     'Czechia': 'Czech Republic',
@@ -11,7 +11,7 @@ COUNTRIES_TRANSLATE_TO_COUNTRYINFO = {
     'Taiwan*': 'Taiwan'
 }
 
-CASE_TYPES = ['Confirmed', 'Deaths', 'Recovered']
+CASE_TYPES = ['confirmed', 'deaths', 'recovered']
 ID_VARS = ['Province/State', 'Country/Region', 'Lat', 'Long']
 VAR_NAME = 'Date'
 VALUE_NAME = 'Cases'

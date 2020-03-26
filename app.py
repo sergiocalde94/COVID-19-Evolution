@@ -91,7 +91,7 @@ if china_vs_europe_vs_eu_show:
         df_all_cases_provinces,
         min_number_cases=min_number_cases,
         log_scale=china_vs_europe_vs_us_log_scale,
-        my_type='Confirmed' if not death_trends else 'Deaths'
+        my_type='confirmed' if not death_trends else 'deaths'
     )
 
     st.plotly_chart(figure_china_vs_europe_vs_us)
@@ -100,14 +100,13 @@ df_all_cases_countries_from_case_n = (
     format_data_from_case_n(df_all_cases_countries,
                             groupby='country_or_region',
                             n=min_number_cases,
-                            my_type=('Confirmed' if not death_trends
-                                     else "Deaths"))
+                            my_type=('confirmed' if not death_trends
+                                     else "deaths"))
 )
 
 countries_to_plot = st.multiselect(
     'Take one/various countries to plot the evolution of that country',
-    sorted(df_all_cases_countries_from_case_n['country_or_region'].unique()),
-    default=['China', 'Italy', 'Spain', 'US']
+    sorted(df_all_cases_countries_from_case_n['country_or_region'].unique())
 )
 
 df_all_cases_countries_from_case_n_subset = (
@@ -178,7 +177,7 @@ if countries_to_plot:
             min_number_cases=min_number_cases,
             log_scale=log_scale_countries,
             cumulative=cumulative,
-            my_type='Deaths'
+            my_type='deaths'
         )
 
         st.plotly_chart(death_figure)

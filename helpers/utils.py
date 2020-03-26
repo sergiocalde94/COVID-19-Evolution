@@ -84,7 +84,7 @@ def union_all_cases_types(df_confirmed: pd.DataFrame,
     df_union_all = pd.concat([df_confirmed, df_deaths, df_recovered])
     df_union_all['type_order'] = (
         df_union_all['type']
-        .apply(lambda x: 1 if x == 'Confirmed' else 2 if 'Deaths' else 3)
+        .apply(lambda x: 1 if x == 'confirmed' else 2 if 'deaths' else 3)
     )
 
     return df_union_all
@@ -95,7 +95,7 @@ def format_data_from_case_n(df: pd.DataFrame,
                             groupby: str,
                             n: int) -> pd.DataFrame:
     first_date_grouped = (
-        df[(df['type'] == 'Confirmed') & (df['cases'] >= n)]
+        df[(df['type'] == 'confirmed') & (df['cases'] >= n)]
         .groupby(groupby)
         .date
         .first()
@@ -129,7 +129,7 @@ def format_data_from_case_n(df: pd.DataFrame,
 def format_data_from_case_n(df: pd.DataFrame,
                             groupby: str,
                             n: int,
-                            my_type: str = 'Confirmed') -> pd.DataFrame:
+                            my_type: str = 'confirmed') -> pd.DataFrame:
     first_date_grouped = (
         df[(df['type'] == my_type) & (df['cases'] >= n)]
         .groupby(groupby)
